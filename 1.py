@@ -6,7 +6,7 @@ def cumprimentar():
     mensagem.config(text=f"Olá, {nome}! Você tem {idade} anos.")
 
 janela = tk.Tk()
-janela.title("Meu primeiro programa")
+janela.title("Meu Projeto")
 janela.geometry("400x250")
 
 tk.Label(janela, text="Digite seu nome:").pack()
