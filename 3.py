@@ -2,7 +2,7 @@
 SISTEMA DE CADASTRO — PROJETO TEMPLATE
 =================================================
 
-Este arquivo é um MODELO (template) adaptado para o projeto do Sistemaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa da
+Este arquivo é um MODELO (template) adaptado para o projeto do Sistemaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa da
 Unimar — Bloco 5 (cursos voltados para a área de T.I.).
 
 Ele já usa tudo que vimos na Semana 2:
