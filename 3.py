@@ -74,11 +74,11 @@ class App(tk.Tk):
         frame_titulo = tk.Frame(self, bg="#123B5D", padx=20, pady=16)
         frame_titulo.pack(fill="x")
 
-        tk.Label(frame_titulo, text="CANTINA UNIMAR",
+        tk.Label(frame_titulo, text="Sistema UNIMAR",
                  font=("Calibri", 20, "bold"), fg="white",
                  bg="#123B5D").pack(anchor="w")
         tk.Label(frame_titulo,
-                 text="Bloco 5 • Área de T.I. | Cadastro de Produtos",
+                 text="Bloco 5 • Área de T.I. | Cadastro",
                  font=("Calibri", 10), fg="#DCEAF5",
                  bg="#123B5D").pack(anchor="w", pady=(3, 0))
 
