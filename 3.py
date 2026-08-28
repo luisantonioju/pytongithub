@@ -43,7 +43,7 @@ class App(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.title("Cantina Unimar — Bloco 5 | Cadastro de Produtos")
+        self.title("Sstema Unimar — Bloco 5 | Cadastro")
         self.geometry("650x570")
         self.resizable(False, False)
         self.configure(bg="#F4F7FB")
