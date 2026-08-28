@@ -1,8 +1,9 @@
 """
-SISTEMA DE CADASTRO DE ALUNOS — PROJETO TEMPLATE
-==================================================
+SISTEMA DE CADASTRO DA CANTINA — PROJETO TEMPLATE
+=================================================
 
-Este arquivo é um MODELO (template) para o seu projeto pessoal.
+Este arquivo é um MODELO (template) adaptado para o projeto da Cantina da
+Unimar — Bloco 5 (cursos voltados para a área de T.I.).
 
 Ele já usa tudo que vimos na Semana 2:
     - Layout com grid() e Frame (organização em blocos)
@@ -12,14 +13,13 @@ Ele já usa tudo que vimos na Semana 2:
     - Salvamento e carregamento de dados em JSON
 
 COMO ADAPTAR PARA O SEU PROJETO:
-    1. Troque os campos do formulário (em criar_widgets) pelos do seu tema
-       (ex: livro/autor/ano, tarefa/prioridade/prazo, contato/telefone/e-mail...).
-    2. Ajuste o dicionário criado em cadastrar_aluno() com os novos campos.
+    1. Troque os campos do formulário (em criar_widgets) pelos do seu tema.
+    2. Ajuste o dicionário criado em cadastrar_produto() com os novos campos.
     3. Ajuste a linha exibida na Listbox, em atualizar_lista().
     4. O resto da estrutura (classe, salvar/carregar em JSON, validação,
        botões de ação) pode ser reaproveitado quase sem mudanças.
 
-Para rodar: python cadastro_alunos.py
+Para rodar: python 3.py
 """
 
 import tkinter as tk
@@ -29,7 +29,7 @@ import os
 
 # Nome do arquivo onde os cadastros ficam salvos.
 # Fica na mesma pasta do programa.
-ARQUIVO_DADOS = "alunos.json"
+ARQUIVO_DADOS = "cantina.json"
 
 
 class App(tk.Tk):
@@ -43,22 +43,23 @@ class App(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.title("Sistema de Cadastro de Alunos")
-        self.geometry("540x520")
+        self.title("Cantina Unimar — Bloco 5 | Cadastro de Produtos")
+        self.geometry("650x570")
         self.resizable(False, False)
-        self.configure(bg="#FFFFFF")
+        self.configure(bg="#F4F7FB")
 
         # Variáveis ligadas aos campos do formulário (StringVar).
         # Elas guardam o valor atual do widget e permitem ler/limpar
         # os campos com .get() / .set(), sem precisar caçar cada widget.
-        self.var_nome = tk.StringVar()
-        self.var_idade = tk.StringVar()
-        self.var_curso = tk.StringVar()
-        self.var_turno = tk.StringVar(value="Manhã")
+        self.var_produto = tk.StringVar()
+        self.var_categoria = tk.StringVar()
+        self.var_preco = tk.StringVar()
+        self.var_quantidade = tk.StringVar()
+        self.var_turno = tk.StringVar(value="Todos")
 
-        # Lista em memória com os alunos já cadastrados.
+        # Lista em memória com os produtos já cadastrados.
         # Começa carregando o que já existe no arquivo JSON (se existir).
-        self.alunos = carregar_dados()
+        self.produtos = carregar_dados()
 
         self.criar_widgets()
         self.atualizar_lista()
@@ -69,145 +70,183 @@ class App(tk.Tk):
     def criar_widgets(self):
         """Cria e organiza todos os widgets da janela."""
 
-        # ----- Frame 1: dados do aluno (formulário em grid) -----
-        frame_dados = tk.Frame(self, padx=20, pady=20)
-        frame_dados.pack(fill="x")
+        # ----- Cabeçalho do sistema -----
+        frame_titulo = tk.Frame(self, bg="#123B5D", padx=20, pady=16)
+        frame_titulo.pack(fill="x")
 
-        tk.Label(frame_dados, text="Nome:", font=("Calibri", 11)) \
-            .grid(row=0, column=0, sticky="w", pady=6)
-        tk.Entry(frame_dados, textvariable=self.var_nome, width=32) \
-            .grid(row=0, column=1, columnspan=3, sticky="w")
+        tk.Label(frame_titulo, text="CANTINA UNIMAR",
+                 font=("Calibri", 20, "bold"), fg="white",
+                 bg="#123B5D").pack(anchor="w")
+        tk.Label(frame_titulo,
+                 text="Bloco 5 • Área de T.I. | Cadastro de Produtos",
+                 font=("Calibri", 10), fg="#DCEAF5",
+                 bg="#123B5D").pack(anchor="w", pady=(3, 0))
 
-        tk.Label(frame_dados, text="Idade:", font=("Calibri", 11)) \
-            .grid(row=1, column=0, sticky="w", pady=6)
-        tk.Entry(frame_dados, textvariable=self.var_idade, width=8) \
-            .grid(row=1, column=1, sticky="w")
+        # ----- Frame 1: dados do produto (formulário em grid) -----
+        frame_dados = tk.Frame(self, bg="#FFFFFF", padx=20, pady=18)
+        frame_dados.pack(fill="x", padx=16, pady=(16, 8))
 
-        tk.Label(frame_dados, text="Curso:", font=("Calibri", 11)) \
-            .grid(row=2, column=0, sticky="w", pady=6)
-        tk.Entry(frame_dados, textvariable=self.var_curso, width=32) \
-            .grid(row=2, column=1, columnspan=3, sticky="w")
+        tk.Label(frame_dados, text="Produto:",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").grid(row=0, column=0, sticky="w", pady=6)
+        tk.Entry(frame_dados, textvariable=self.var_produto, width=38,
+                 font=("Calibri", 11)).grid(row=0, column=1,
+                 columnspan=3, sticky="w")
 
-        tk.Label(frame_dados, text="Turno:", font=("Calibri", 11)) \
-            .grid(row=3, column=0, sticky="w", pady=6)
+        tk.Label(frame_dados, text="Categoria:",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").grid(row=1, column=0, sticky="w", pady=6)
+        tk.Entry(frame_dados, textvariable=self.var_categoria, width=38,
+                 font=("Calibri", 11)).grid(row=1, column=1,
+                 columnspan=3, sticky="w")
+
+        tk.Label(frame_dados, text="Preço (R$):",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").grid(row=2, column=0, sticky="w", pady=6)
+        tk.Entry(frame_dados, textvariable=self.var_preco, width=12,
+                 font=("Calibri", 11)).grid(row=2, column=1, sticky="w")
+
+        tk.Label(frame_dados, text="Estoque:",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").grid(row=2, column=2, sticky="w", padx=(20, 6))
+        tk.Entry(frame_dados, textvariable=self.var_quantidade, width=10,
+                 font=("Calibri", 11)).grid(row=2, column=3, sticky="w")
+
+        tk.Label(frame_dados, text="Disponível no turno:",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").grid(row=3, column=0, sticky="w", pady=6)
         # Um Radiobutton por opção de turno, todos ligados à mesma StringVar
         # -> só um pode ficar selecionado por vez.
-        for i, turno in enumerate(["Manhã", "Tarde", "Noite"]):
-            tk.Radiobutton(
-                frame_dados, text=turno, variable=self.var_turno, value=turno
-            ).grid(row=3, column=1 + i, sticky="w")
+        for i, turno in enumerate(["Todos", "Manhã", "Tarde", "Noite"]):
+            tk.Radiobutton(frame_dados, text=turno,
+                           variable=self.var_turno, value=turno,
+                           bg="#FFFFFF", fg="#243447",
+                           activebackground="#FFFFFF").grid(
+                           row=3, column=1 + i, sticky="w")
 
         # ----- Frame 2: botões de ação -----
-        frame_botoes = tk.Frame(self, padx=20, pady=8)
+        frame_botoes = tk.Frame(self, bg="#F4F7FB", padx=16, pady=8)
         frame_botoes.pack(fill="x")
 
-        tk.Button(
-            frame_botoes, text="Cadastrar", command=self.cadastrar_aluno,
-            bg="#06B6D4", fg="white", activebackground="#0891B2",
-            relief="flat", padx=12, pady=6,
-        ).pack(side="left", padx=(0, 8))
+        tk.Button(frame_botoes, text="Cadastrar produto",
+                  command=self.cadastrar_produto, bg="#06B6D4", fg="white",
+                  activebackground="#0891B2", relief="flat",
+                  padx=12, pady=7).pack(side="left", padx=(0, 8))
+        tk.Button(frame_botoes, text="Remover selecionado",
+                  command=self.remover_produto, padx=12, pady=7).pack(
+                  side="left", padx=(0, 8))
+        tk.Button(frame_botoes, text="Limpar campos",
+                  command=self.limpar_campos, padx=12, pady=7).pack(side="left")
 
-        tk.Button(
-            frame_botoes, text="Remover selecionado", command=self.remover_aluno,
-            padx=12, pady=6,
-        ).pack(side="left", padx=(0, 8))
+        # ----- Frame 3: lista de produtos cadastrados -----
+        frame_lista = tk.Frame(self, bg="#FFFFFF", padx=16, pady=14)
+        frame_lista.pack(fill="both", expand=True, padx=16, pady=(4, 16))
 
-        tk.Button(
-            frame_botoes, text="Limpar campos", command=self.limpar_campos,
-            padx=12, pady=6,
-        ).pack(side="left")
-
-        # ----- Frame 3: lista de alunos cadastrados -----
-        frame_lista = tk.Frame(self, padx=20, pady=12)
-        frame_lista.pack(fill="both", expand=True)
-
-        tk.Label(frame_lista, text="Alunos cadastrados:", font=("Calibri", 11, "bold")) \
-            .pack(anchor="w")
+        tk.Label(frame_lista, text="Produtos cadastrados na cantina:",
+                 font=("Calibri", 11, "bold"), bg="#FFFFFF",
+                 fg="#243447").pack(anchor="w")
 
         # Um Frame só para juntar a Listbox com uma barra de rolagem.
-        frame_lb = tk.Frame(frame_lista)
+        frame_lb = tk.Frame(frame_lista, bg="#FFFFFF")
         frame_lb.pack(fill="both", expand=True, pady=(6, 0))
 
         scrollbar = tk.Scrollbar(frame_lb)
         scrollbar.pack(side="right", fill="y")
 
-        self.lista_alunos = tk.Listbox(
-            frame_lb, yscrollcommand=scrollbar.set, font=("Consolas", 10)
+        self.lista_produtos = tk.Listbox(
+            frame_lb, yscrollcommand=scrollbar.set, font=("Consolas", 9),
+            height=8, selectbackground="#06B6D4", selectforeground="white"
         )
-        self.lista_alunos.pack(side="left", fill="both", expand=True)
-        scrollbar.config(command=self.lista_alunos.yview)
+        self.lista_produtos.pack(side="left", fill="both", expand=True)
+        scrollbar.config(command=self.lista_produtos.yview)
 
     # ------------------------------------------------------------------
     # AÇÕES DO USUÁRIO
     # ------------------------------------------------------------------
-    def cadastrar_aluno(self):
-        """Valida os campos e adiciona um novo aluno à lista + arquivo."""
-        nome = self.var_nome.get().strip()
-        idade = self.var_idade.get().strip()
-        curso = self.var_curso.get().strip()
+    def cadastrar_produto(self):
+        """Valida os campos e adiciona um novo produto à lista + arquivo."""
+        produto = self.var_produto.get().strip()
+        categoria = self.var_categoria.get().strip()
+        preco = self.var_preco.get().strip().replace(",", ".")
+        quantidade = self.var_quantidade.get().strip()
         turno = self.var_turno.get()
 
-        # Validação: nome e curso não podem ficar vazios.
-        if not nome or not curso:
-            messagebox.showwarning(
-                "Campos vazios", "Preencha nome e curso antes de cadastrar."
-            )
+        # Validação: produto e categoria não podem ficar vazios.
+        if not produto or not categoria:
+            messagebox.showwarning("Campos vazios",
+                                   "Preencha produto e categoria antes de cadastrar.")
             return
 
-        # Validação: idade precisa ser um número.
-        if not idade.isdigit():
-            messagebox.showwarning(
-                "Idade inválida", "A idade deve ser um número (ex: 18)."
-            )
+        # Validação: preço precisa ser um número válido.
+        try:
+            preco_numero = float(preco)
+            if preco_numero < 0:
+                raise ValueError
+        except ValueError:
+            messagebox.showwarning("Preço inválido",
+                                   "Informe um preço válido (ex: 8,50).")
             return
 
-        # Se passou pelas validações, monta o dicionário do aluno...
-        aluno = {"nome": nome, "idade": int(idade), "curso": curso, "turno": turno}
+        # Validação: estoque precisa ser um número inteiro.
+        if not quantidade.isdigit():
+            messagebox.showwarning("Estoque inválido",
+                                   "O estoque deve ser um número inteiro (ex: 20).")
+            return
+
+        # Se passou pelas validações, monta o dicionário do produto...
+        produto_cadastrado = {
+            "produto": produto,
+            "categoria": categoria,
+            "preco": round(preco_numero, 2),
+            "quantidade": int(quantidade),
+            "turno": turno,
+        }
         # ...adiciona na lista em memória...
-        self.alunos.append(aluno)
+        self.produtos.append(produto_cadastrado)
         # ...e salva tudo no arquivo, para não perder ao fechar o programa.
-        salvar_dados(self.alunos)
+        salvar_dados(self.produtos)
 
         self.atualizar_lista()
         self.limpar_campos()
-        messagebox.showinfo("Sucesso", f"Aluno \"{nome}\" cadastrado!")
+        messagebox.showinfo("Sucesso", f"Produto \"{produto}\" cadastrado!")
 
-    def remover_aluno(self):
-        """Remove o aluno selecionado na Listbox."""
-        selecionado = self.lista_alunos.curselection()
+    def remover_produto(self):
+        """Remove o produto selecionado na Listbox."""
+        selecionado = self.lista_produtos.curselection()
 
         if not selecionado:
-            messagebox.showwarning(
-                "Nenhum aluno selecionado",
-                "Clique em um aluno da lista antes de remover.",
-            )
+            messagebox.showwarning("Nenhum produto selecionado",
+                                   "Clique em um produto da lista antes de remover.")
             return
 
         indice = selecionado[0]
-        aluno_removido = self.alunos.pop(indice)
-        salvar_dados(self.alunos)
+        produto_removido = self.produtos.pop(indice)
+        salvar_dados(self.produtos)
         self.atualizar_lista()
-        messagebox.showinfo("Removido", f"Aluno \"{aluno_removido['nome']}\" removido.")
+        messagebox.showinfo("Removido",
+                            f"Produto \"{produto_removido['produto']}\" removido.")
 
     def limpar_campos(self):
-        """Limpa o formulário, sem mexer na lista de alunos."""
-        self.var_nome.set("")
-        self.var_idade.set("")
-        self.var_curso.set("")
-        self.var_turno.set("Manhã")
+        """Limpa o formulário, sem mexer na lista de produtos."""
+        self.var_produto.set("")
+        self.var_categoria.set("")
+        self.var_preco.set("")
+        self.var_quantidade.set("")
+        self.var_turno.set("Todos")
 
     # ------------------------------------------------------------------
     # ATUALIZAÇÃO DA TELA
     # ------------------------------------------------------------------
     def atualizar_lista(self):
-        """Redesenha a Listbox a partir de self.alunos."""
-        self.lista_alunos.delete(0, "end")
-        for aluno in self.alunos:
+        """Redesenha a Listbox a partir de self.produtos."""
+        self.lista_produtos.delete(0, "end")
+        for produto in self.produtos:
             linha = (
-                f"{aluno['nome']:<20} {aluno['idade']:>3} anos   "
-                f"{aluno['curso']:<15} {aluno['turno']}"
+                f"{produto['produto']:<22} {produto['categoria']:<14} "
+                f"R$ {produto['preco']:>7.2f}  "
+                f"Est.: {produto['quantidade']:>3}  {produto['turno']}"
             )
-            self.lista_alunos.insert("end", linha)
+            self.lista_produtos.insert("end", linha)
 
 
 # ----------------------------------------------------------------------
@@ -216,14 +255,14 @@ class App(tk.Tk):
 # Ficam fora da classe porque não dependem da interface — só leem e
 # escrevem no arquivo. Isso facilita reaproveitá-las em outro projeto.
 
-def salvar_dados(alunos):
-    """Salva a lista de alunos no arquivo JSON."""
+def salvar_dados(produtos):
+    """Salva a lista de produtos no arquivo JSON."""
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as arquivo:
-        json.dump(alunos, arquivo, ensure_ascii=False, indent=2)
+        json.dump(produtos, arquivo, ensure_ascii=False, indent=2)
 
 
 def carregar_dados():
-    """Carrega a lista de alunos do arquivo JSON, se ele existir."""
+    """Carrega a lista de produtos do arquivo JSON, se ele existir."""
     if not os.path.exists(ARQUIVO_DADOS):
         return []
     with open(ARQUIVO_DADOS, encoding="utf-8") as arquivo:
