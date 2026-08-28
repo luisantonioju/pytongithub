@@ -1,0 +1,23 @@
+[
+  {
+    "produto": "Café",
+    "categoria": "Bebidas",
+    "preco": 4.5,
+    "quantidade": 30,
+    "turno": "Todos"
+  },
+  {
+    "produto": "Pão de queijo",
+    "categoria": "Lanches",
+    "preco": 5.0,
+    "quantidade": 25,
+    "turno": "Todos"
+  },
+  {
+    "produto": "Refrigerante lata",
+    "categoria": "Bebidas",
+    "preco": 6.0,
+    "quantidade": 20,
+    "turno": "Tarde"
+  }
+]
