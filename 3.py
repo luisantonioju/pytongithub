@@ -29,7 +29,7 @@ import os
 
 # Nome do arquivo onde os cadastros ficam salvos.
 # Fica na mesma pasta do programa.
-ARQUIVO_DADOS = "cantina.json"
+ARQUIVO_DADOS = "sistema.json"
 
 
 class App(tk.Tk):
