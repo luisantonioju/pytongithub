@@ -1,8 +1,8 @@
 """
-SISTEMA DE CADASTRO DA CANTINA — PROJETO TEMPLATE
+SISTEMA DE CADASTRO — PROJETO TEMPLATE
 =================================================
 
-Este arquivo é um MODELO (template) adaptado para o projeto da Cantina da
+Este arquivo é um MODELO (template) adaptado para o projeto do Sistema da
 Unimar — Bloco 5 (cursos voltados para a área de T.I.).
 
 Ele já usa tudo que vimos na Semana 2:
