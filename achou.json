@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "descricao": "Garrafa d'água",
+        "bloco": "Bloco 5",
+        "data": "02/09/2026 18:34",
+        "status": "Devolvido"
+    },
+    {
+        "descricao": "Notebook",
+        "bloco": "Bloco 4",
+        "data": "02/09/2026 18:35",
+        "status": "Disponível"
+    }
+]
