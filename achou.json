@@ -9,6 +9,12 @@
         "descricao": "Notebook",
         "bloco": "Bloco 4",
         "data": "02/09/2026 18:35",
-        "status": "Disponível"
+        "status": "Devolvido"
+    },
+    {
+        "descricao": "Caneta",
+        "bloco": "Bloco 5",
+        "data": "04/09/2026 17:54",
+        "status": "Devolvido"
     }
 ]
