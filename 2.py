@@ -73,7 +73,7 @@ class App(tk.Tk):
         frame_dados = tk.Frame(self, padx=20, pady=20)
         frame_dados.pack(fill="x")
 
-        tk.Label(frame_dados, text="Nome:", font=("Calibri", 11)) \
+        tk.Label(frame_dados, text="Nome Completo:", font=("Calibri", 11)) \
             .grid(row=0, column=0, sticky="w", pady=6)
         tk.Entry(frame_dados, textvariable=self.var_nome, width=32) \
             .grid(row=0, column=1, columnspan=3, sticky="w")
